@@ -19,6 +19,7 @@ namespace Quiz
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //comentar
         }
 
         public IConfiguration Configuration { get; }

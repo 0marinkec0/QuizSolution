@@ -16,9 +16,17 @@ namespace Quiz.Interface.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+            modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
+            modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
+            modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
+            modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
+            modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
         }
     }
 }

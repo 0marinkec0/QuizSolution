@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quiz.Application.Common.Interfaces;
 using Quiz.Domain.Entites;
 using Quiz.Interface.Data;
+using Quiz.Interface.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +16,9 @@ namespace Quiz.Interface
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection service)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            service.AddDbContext<QuizDbContext>(options => 
-            options.UseSqlServer("ConntectionString"));
-
-            service.AddIdentity<User, IdentityRole<int>>(o =>
+            services.AddIdentity<User, IdentityRole<int>>(o =>
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
@@ -30,10 +29,15 @@ namespace Quiz.Interface
                 o.User.RequireUniqueEmail = true;
                 o.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
             })
-                .AddEntityFrameworkStores<QuizDbContext>()
-                .AddDefaultTokenProviders();
+                  .AddEntityFrameworkStores<QuizDbContext>()
+                  .AddDefaultTokenProviders();
 
-            return service;
+            services.AddDbContext<QuizDbContext>(options => 
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<IIdentityService, IdentityService>();
+
+            return services;
         }
     }
 }

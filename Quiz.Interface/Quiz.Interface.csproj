@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.16">
@@ -23,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Quiz.Application\Quiz.Application.csproj" />
     <ProjectReference Include="..\Quiz.Domain\Quiz.Domain.csproj" />
   </ItemGroup>
 

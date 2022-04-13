@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quiz.Domain.Entites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace Quiz.Application.Common.Interfaces
 {
     public interface IRepository
     {
-        Task AddAsync<T>(T entity);
-        Task<List<T>> GetListAsync<T>();
-        Task<T> GetByIdAsync<T>(int id);
-        Task DeleteAsync<T>(int id);
+        Task AddAsync<T>(T entity) where T : BaseEntity;
+        Task<List<T>> GetListAsync<T>() where T : BaseEntity;
+        Task<T> GetByIdAsync<T>(int id) where T : BaseEntity;
+        Task DeleteAsync<T>(int id) where T : BaseEntity;
         Task SaveAsync();
     }
 }

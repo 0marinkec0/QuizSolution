@@ -1,4 +1,7 @@
-﻿using Quiz.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Quiz.Application.Common.Interfaces;
+using Quiz.Domain.Entites;
+using Quiz.Interface.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +12,41 @@ namespace Quiz.Interface.Services
 {
     public class Repository : IRepository
     {
-        public Task AddAsync<T>(T entity)
+        private readonly QuizDbContext _dbContext;
+
+        public Repository(QuizDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public Task DeleteAsync<T>(int id)
+        public async Task AddAsync<T>(T entity) where T : BaseEntity
         {
-            throw new NotImplementedException();
+            await _dbContext.Set<T>().AddAsync(entity);
         }
 
-        public Task<T> GetByIdAsync<T>(int id)
+        public async Task DeleteAsync<T>(int id) where T : BaseEntity
         {
-            throw new NotImplementedException();
+            var entity = await _dbContext.Set<T>().FindAsync(id);
+
+            _dbContext.Set<T>().Remove(entity);
         }
 
-        public Task<List<T>> GetListAsync<T>()
+        public async Task<T> GetByIdAsync<T>(int id) where T : BaseEntity
         {
-            throw new NotImplementedException();
+            var query =  _dbContext.Set<T>().AsQueryable();
+
+            return await query.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task SaveAsync()
+        public async Task<List<T>> GetListAsync<T>() where T : BaseEntity
         {
-            throw new NotImplementedException();
+            var query = _dbContext.Set<T>().AsQueryable();
+            return await query.ToListAsync();
+        }
+
+        public async Task SaveAsync()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

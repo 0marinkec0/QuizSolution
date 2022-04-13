@@ -22,9 +22,19 @@ namespace Quiz.Interface.Services
             _userManager = userManager;
         }
 
-        public Task<LoginResult> Login(LoginModel model)
+        public async Task<LoginResult> Login(LoginModel model)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return new LoginResult() { Successfull = false, Error = "Invalid username or password" };
+
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
+            if (!signInResult.Succeeded)
+                return new LoginResult() { Successfull = false, Error = await signInResult.SignInResultErrorAsync(user, _userManager)};
+
+            return new LoginResult() { Successfull = true };
         }
 
         public async Task<RegisterResult> Register(RegisterModel model)
@@ -38,9 +48,11 @@ namespace Quiz.Interface.Services
             var identityResult = await _userManager.CreateAsync(user, model.Password);
 
             if (identityResult.Succeeded)
-                return new RegisterResult() { Successfull = true };
+                return RegisterResult.Success();
+            // return new RegisterResult() { Successfull = true };
 
-            return new RegisterResult() { Successfull = false, Errors = identityResult.Errors.Select(e => e.Description).ToArray() };
+            return RegisterResult.Failure(identityResult.Errors.Select(e => e.Description));
+            //return new RegisterResult() { Successfull = false, Errors = identityResult.Errors.Select(e => e.Description).ToArray() };
         }
     }
 }

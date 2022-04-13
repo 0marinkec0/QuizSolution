@@ -8,7 +8,22 @@ namespace Quiz.Application.Common.Models.Authentication
 {
     public class RegisterResult
     {
+        public RegisterResult(bool successfull, IEnumerable<string> errors)
+        {
+            Successfull = successfull;
+            Errors = errors.ToArray();
+        }
         public bool Successfull { get; set; }
         public string[] Errors { get; set; }
+
+        public static RegisterResult Success()
+        {
+            return new RegisterResult(true, Array.Empty<string>());
+        }
+
+        public static RegisterResult Failure(IEnumerable<string> errors)
+        {
+            return new RegisterResult(false, errors);
+        }
     }
 }

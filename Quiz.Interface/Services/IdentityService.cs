@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Quiz.Application.Common.Interfaces;
 using Quiz.Application.Common.Models;
 using Quiz.Application.Common.Models.Authentication;
 using Quiz.Domain.Entites;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,13 +17,15 @@ namespace Quiz.Interface.Services
 {
     public class IdentityService : IIdentityService
     {
+        private readonly IConfiguration _configuration;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
 
-        public IdentityService(SignInManager<User> signInManager, UserManager<User> userManager)
+        public IdentityService(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         public async Task<LoginResult> Login(LoginModel model)
@@ -27,14 +33,17 @@ namespace Quiz.Interface.Services
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
-                return new LoginResult() { Successfull = false, Error = "Invalid username or password" };
+                return LoginResult.Faliure("Invalid username or password");
+               //return new LoginResult() { Successfull = false, Error = "Invalid username or password" };
 
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
             if (!signInResult.Succeeded)
-                return new LoginResult() { Successfull = false, Error = await signInResult.SignInResultErrorAsync(user, _userManager)};
+                return LoginResult.Faliure(await signInResult.SignInResultErrorAsync(user, _userManager));
+            //return new LoginResult() { Successfull = false, Error = await signInResult.SignInResultErrorAsync(user, _userManager)};
 
-            return new LoginResult() { Successfull = true };
+            return LoginResult.Success(GenerateJwtToken(user));
+            //return new LoginResult() { Successfull = true, Token = GenerateJwtToken(user)};
         }
 
         public async Task<RegisterResult> Register(RegisterModel model)
@@ -53,6 +62,30 @@ namespace Quiz.Interface.Services
 
             return RegisterResult.Failure(identityResult.Errors.Select(e => e.Description));
             //return new RegisterResult() { Successfull = false, Errors = identityResult.Errors.Select(e => e.Description).ToArray() };
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("UserName", user.Email)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expireDate = DateTime.Now.AddDays(Convert.ToInt32(_configuration["Jwt:ExpireInDays"]));
+
+            var token = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
+                claims,
+                expires: expireDate,
+                signingCredentials: credentials
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

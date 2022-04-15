@@ -28,5 +28,17 @@ namespace Quiz.UI.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            var result = await _identityService.Login(model);
+
+            if (!result.Successfull)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

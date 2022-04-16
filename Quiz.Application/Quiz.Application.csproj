@@ -9,10 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Player\Command\" />
-    <Folder Include="Player\Query\" />
-    <Folder Include="Question\Command\" />
-    <Folder Include="Question\Query\" />
+    <Folder Include="Questions\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

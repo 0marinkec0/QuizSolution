@@ -24,7 +24,7 @@ namespace Quiz.Application.Players.Queries
         public async Task<List<PlayerViewModel>> Handle(GetPlayersByHighscoreQuery request, CancellationToken cancellationToken)
         {
             var list = (await _repository.GetListAsync<Player>())
-                .OrderBy(a => a.HighScore)
+                .OrderByDescending(a => a.HighScore)
                 .Select(b => new PlayerViewModel
                 {
                     UserName = b.UserName,

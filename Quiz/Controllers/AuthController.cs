@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Quiz.Application.Common.Interfaces;
 using Quiz.Application.Common.Models;
+using Quiz.Application.Players.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Quiz.UI.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
         private readonly IIdentityService _identityService;
 
@@ -26,6 +27,7 @@ namespace Quiz.UI.Controllers
             if (!result.Successfull)
                 return BadRequest(result);
 
+            await Mediator.Send(new CreatePlayerCommand(model.UserName));
             return Ok(result);
         }
 

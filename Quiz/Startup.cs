@@ -15,6 +15,7 @@ using Quiz.Domain.Entites;
 using Quiz.Interface;
 using Quiz.Interface.Data;
 using Quiz.Interface.Services;
+using Quiz.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,36 @@ namespace Quiz
         {
             services.AddApplication();
             services.AddInfrastructure(Configuration);
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
             services.AddHttpContextAccessor();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Quiz", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[]{ }
+                    }
+                });
             });
         }
 

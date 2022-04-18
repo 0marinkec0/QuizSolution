@@ -34,16 +34,13 @@ namespace Quiz.Interface.Services
 
             if (user == null)
                 return LoginResult.Faliure("Invalid username or password");
-               //return new LoginResult() { Successfull = false, Error = "Invalid username or password" };
 
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
             if (!signInResult.Succeeded)
                 return LoginResult.Faliure(await signInResult.SignInResultErrorAsync(user, _userManager));
-            //return new LoginResult() { Successfull = false, Error = await signInResult.SignInResultErrorAsync(user, _userManager)};
 
             return LoginResult.Success(GenerateJwtToken(user));
-            //return new LoginResult() { Successfull = true, Token = GenerateJwtToken(user)};
         }
 
         public async Task<RegisterResult> Register(RegisterModel model)
@@ -58,10 +55,8 @@ namespace Quiz.Interface.Services
 
             if (identityResult.Succeeded)
                 return RegisterResult.Success();
-            // return new RegisterResult() { Successfull = true };
 
             return RegisterResult.Failure(identityResult.Errors.Select(e => e.Description));
-            //return new RegisterResult() { Successfull = false, Errors = identityResult.Errors.Select(e => e.Description).ToArray() };
         }
 
         private string GenerateJwtToken(User user)
@@ -70,7 +65,7 @@ namespace Quiz.Interface.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim("UserName", user.Email)
+                new Claim("UserName", user.UserName)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

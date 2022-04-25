@@ -13,7 +13,7 @@ namespace Quiz.Interface.Data
         public QuizDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<QuizDbContext>();
-            optionsBuilder.UseSqlServer("server=DESKTOP-4UGJ1EH\\SQLEXPRESS;Database=QuizDB;Trusted_Connection=True;MultipleActiveResultSets=True;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-4UGJ1EH\\SQLEXPRESS;Database=QuizDB;Trusted_Connection=True;MultipleActiveResultSets=True;");
 
             return new QuizDbContext(optionsBuilder.Options);
         }

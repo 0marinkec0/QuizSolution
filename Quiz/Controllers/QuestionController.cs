@@ -21,9 +21,9 @@ namespace Quiz.UI.Controllers
 
         [Route("RandomQuestion")]
         [HttpGet]
-        public async Task<IActionResult> GetRandomQuestion()
+        public async Task<IActionResult> GetRandomQuestion(int category)
         {
-            var question = await Mediator.Send(new GetRandomQuestionQuery());
+            var question = await Mediator.Send(new GetRandomQuestionQuery(category));
             return Ok(question);
         }
     }

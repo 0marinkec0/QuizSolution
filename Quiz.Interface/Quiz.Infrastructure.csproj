@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Quiz.Domain\Quiz.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Db\VolumeData\" />
+  </ItemGroup>
+
 </Project>

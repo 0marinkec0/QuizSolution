@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quiz.Domain.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,6 @@ namespace Quiz.Application.Common.Models.Questions
         public string AnswerThree { get; set; }
         public string AnswerFour { get; set; }
         public string Answer { get; set; }
+        public Category Category { get; set; }
     }
 }

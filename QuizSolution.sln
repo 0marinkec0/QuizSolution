@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quiz.UI", "Quiz\Quiz.UI.csproj", "{D0EEB462-8544-436D-8158-768637C8B034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Domain", "Quiz.Domain\Quiz.Domain.csproj", "{12D42847-42E9-4984-9C47-67500854BF2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quiz.Domain", "Quiz.Domain\Quiz.Domain.csproj", "{12D42847-42E9-4984-9C47-67500854BF2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Application", "Quiz.Application\Quiz.Application.csproj", "{C8A42640-4506-484D-AFFC-2AD8913203C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quiz.Application", "Quiz.Application\Quiz.Application.csproj", "{C8A42640-4506-484D-AFFC-2AD8913203C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Interface", "Quiz.Interface\Quiz.Interface.csproj", "{C981D2E4-6C91-42E4-B373-0A3D7E79DD03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quiz.Infrastructure", "Quiz.Interface\Quiz.Infrastructure.csproj", "{C981D2E4-6C91-42E4-B373-0A3D7E79DD03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

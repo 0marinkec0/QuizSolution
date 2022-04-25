@@ -30,7 +30,8 @@ namespace Quiz.Application.Questions.Command
                 AnswerOne = request.model.AnswerOne,
                 AnswerTwo = request.model.AnswerTwo,
                 AnswerThree = request.model.AnswerThree,
-                AnswerFour = request.model.AnswerFour
+                AnswerFour = request.model.AnswerFour,
+                Category = request.model.Category
             };
 
             await _repository.AddAsync(question);
